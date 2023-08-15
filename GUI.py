@@ -1,6 +1,8 @@
 # Imports
 from cProfile import label
 from tkinter import *
+import random
+import string
 
 # Main Screen
 master = Tk()
@@ -12,8 +14,12 @@ trans_file = open("Transaction Log.txt", "w")
 
 # Functions
 
+def generate_random_password(length=12):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    random_password = ''.join(random.choice(characters) for _ in range(length))
+    return random_password
 
-def finish_register():
+def finish_register(random_password=None):
     reg_name = temp_name.get()
     reg_surname = temp_surname.get()
     reg_mobile = temp_mobile.get()
@@ -28,15 +34,17 @@ def finish_register():
             notif.config(fg="red", text="Account already exits")
             return
         else:
+            random_password = generate_random_password()  # Generate a random password
             data_file = open("Bank Data.txt", "w")
             data_file.write(temp_name.get() + '\n')
             data_file.write(temp_surname.get() + '\n')
             data_file.write(temp_mobile.get() + '\n')
-            notif.config(fg="green", text="Account has been created successfully")
+            data_file.write(random_password + '\n')  # Save the random password
+            notif.config(fg="green", text="Account has been created successfully with the following password " + random_password)
             data_file.close()
 
 
-def register():
+def register(reg_surname=None, reg_name=None, reg_mobile=None, random_password=None):
     # Vars
     global temp_name
     global temp_surname
