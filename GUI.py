@@ -82,8 +82,8 @@ def register(reg_surname=None, reg_name=None, reg_mobile=None, random_password=N
 
 
 def login_session():
-    login_name = temp_login_name.get()
-    login_password = temp_login_password.get()
+    login_name = temp_login_name
+    login_password = temp_login_password
     data_file = open("Bank Data.txt", "r")
 
     for login_name in data_file:
@@ -95,14 +95,34 @@ def login_session():
             login_password = data_file[3]
            # data_file.close()
 
+        def login_session():
+            login_name = temp_login_name
+            login_password = temp_login_password
+
+            with open("Bank Data.txt", "r") as data_file:
+                account_data = data_file.read().splitlines()
+
+            for i in range(0, len(account_data), 4):
+                stored_name = account_data[i]
+                stored_password = account_data[i + 3]
+
+                if stored_name == login_name and stored_password == login_password:
+                    # Login successful
+                    print("Login successful")
+                    # Perform actions after successful login here
+                    break
+            else:
+                # Loop completed without finding a matching account
+                print("Invalid login credentials")
+
     # Account Dashboard
     if login_password == login_password:
         login_screen.destroy()
         account_dashboard = Toplevel(master)
         account_dashboard.title('Dashboard')
         # Labels
-        label(account_dashboard, text="Account Dashboard", font=('Arial', 12)).grid(row=0, sticky=N, pady=10)
-        label(account_dashboard, text="Welcome" + login_name, font=('Arial', 12)).grid(row=1, sticky=N, pady=5)
+        Label(account_dashboard, text="Account Dashboard", font=('Arial', 12)).grid(row=0, sticky=N, pady=10)
+        Label(account_dashboard, text="Welcome" + login_name, font=('Arial', 12)).grid(row=1, sticky=N, pady=5)
         # Buttons
         Button(account_dashboard, text="Account Dashboard", font=('Arial', 12), width=30).grid(row=2, sticky=N,
                                                                                                padx=10)
